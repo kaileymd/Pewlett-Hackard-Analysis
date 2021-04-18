@@ -213,11 +213,25 @@ INTO unique_titles
 FROM retirement_titles
 ORDER BY emp_no ASC, to_date DESC;
 
-SELECT COUNT(emp_no), title
-INTO retiring_titles
+SELECT title, COUNT(emp_no)
+-- INTO retiring_titles
 FROM unique_titles
 GROUP BY title
 ORDER BY count DESC;
+
+-- Unique retirement age grouped by year
+SELECT EXTRACT  (year from e.birth_date) AS dob, COUNT (ut.title)
+FROM unique_titles AS ut
+JOIN employees AS e
+ON ut.emp_no = e.emp_no
+GROUP BY dob
+ORDER BY dob;
+
+--Count all of PH's employees,
+SELECT EXTRACT (year from birth_date) as dob, COUNT(DISTINCT emp_no)
+from employees
+GROUP BY dob
+ORDER BY dob;
 
 -- DELIVERABLE 2
 -- mentorship eligibility
@@ -231,5 +245,11 @@ ON e.emp_no = ts.emp_no
 WHERE (e.birth_date BETWEEN '1965-01-01' AND '1965-12-31')
 AND (de.to_date > NOW())
 ORDER BY e.emp_no ASC, ts.to_date DESC;
+
+SELECT title, Count(emp_no) FROM mentorship_eligibility
+GROUP BY title
+ORDER BY count DESC;
+
+SELECT COUNT(emp_no) FROM mentorship_eligibility;
 
 --
